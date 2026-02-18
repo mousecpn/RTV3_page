@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Robot Trajectron V3: A Probabilistic Shared Control Framework for SE(3) Manipulation">
+  <meta name="keywords" content="Shared Control, Teleoperation, Task-Level Intent Inference, Multi-Step Manipulation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robot Trajectron V3: A Probabilistic Shared Control Framework for SE(3) Manipulation</title>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Robot Trajectron V3: A Probabilistic Shared Control Framework for SE(3) Manipulation</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=pgD4ZGgAAAAJ">Pinhao Song</a>,</span>
+            <span class="author-block">
+              <a>Zhongxi Li</a>,</span>
+            <span class="author-block">
+              <a href="https://fitz0401.github.io">Ze Fu</a>,</span>
+            <span class="author-block">
+              <a>Federico Ulloa Rios</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://renaud-detry.net">Renaud Detry</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">KU Leuven, Dept. Mechanical Engineering, Robotics, Automation and Mechatronics</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link.
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2011.12948"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span> -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2509.10416"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link.
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/fitz0401/tasc"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Real-world Link. -->
+              <span class="link-block">
+                <a href="https://github.com/fitz0401/tasc_ros2_ws"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-gamepad"></i>
+                  </span>
+                  <span>Real World</span>
+                  </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Teleoperating robotic arms for high-degree-of-freedom (high-DoF) manipulation is cognitively demanding and error-prone, particularly when using low-bandwidth interfaces. To bridge this gap, we introduce <strong>Robot Trajectron V3 (RT-V3)</strong>, a probabilistic shared control framework designed for SE(3) grasping tasks:
+          </p>
+          <ul>
+            <li>
+              <strong>Multimodal Context Encoding:</strong> RT-V3 utilizes a <strong>CVAE</strong> architecture with a transformer-based encoder to process unstructured context, such as point clouds and candidate grasp poses.
+            </li>
+            <li>
+              <strong>Factorized Action Distribution:</strong> To capture human intuition, the model factorizes actions into translational and <strong>translation-conditioned rotational distributions</strong>, explicitly modeling the user's tendency to prioritize position over orientation.
+            </li>
+            <li>
+              <strong>Intent Inference:</strong> During execution, the system performs <strong>Bayesian posterior estimation</strong> to fuse noisy user commands with a learned behavioral prior for accurate intent estimation.
+            </li>
+            <li>
+              <strong>Empirical Success:</strong> Experiments demonstrate high trajectory accuracy and competitive reactive planning. Real-world studies show RT-V3 significantly improves success rates and efficiency while reducing the user's physical and mental workload.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Highlights</h2>
+        <div class="publication-video">
+          <video controls muted autoplay loop preload="metadata" width="100%">
+            <source src="./static/videos/highlight.mp4" type="video/mp4">
+            Please update your browser to view this video content.
+          </video>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Framework. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Framework</h2>
+        <div class="content has-text-centered">
+          <img src="./static/images/RTV3.png" 
+               alt="Overview of our RTV3 framework"
+               style="width: 100%; max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+          <p class="has-text-justified" style="margin-top: 20px;">
+            <strong>Overview of our RT-V3 framework.</strong> 
+            Robot Trajectron V3 (RT-V3) is a probabilistic shared control framework designed for SE(3) manipulation tasks. 
+            The architecture leverages a <strong>Conditional Variational Autoencoder (CVAE)</strong> to model the multi-modality of user intent. 
+            As shown in the <strong>Prior Training and Inference</strong> stage (left), the model utilizes a transformer-based architecture to encode unstructured context, including <strong>point cloud tokens</strong> and <strong>candidate grasp poses</strong>. 
+            To capture human motion patterns, the framework factorizes the action distribution into a translational distribution and a rotational distribution conditioned on translation. 
+            During <strong>Posterior Decision Making</strong> (right), RT-V3 performs Bayesian posterior estimation to fuse uncertain user commands with the learned behavioral prior, allowing for accurate intent estimation. 
+            The system also features an <strong>Asynchronous Shared Control Mechanism</strong>, which enables the robot to execute autonomous actions during periods of user inactivity, significantly reducing cognitive and physical workload.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Framework. -->
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3 has-text-centered">Trajectory Prediction</h2>
+
+        <div class="content has-text-centered">
+          <p style="margin-bottom: 20px; font-size: 0.9em; color: #666;">
+            RT-V3 predicts accurate SE(3) trajectories towards the intended goals.
+          </p>
+        </div>
+        <div class="columns is-centered" style="margin-bottom: 10px;">
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/trajpred/traj465.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/trajpred/traj842.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/trajpred/traj1927.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/trajpred/traj3488.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+
+        <div class="columns is-centered" style="margin-bottom: 10px;">
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/trajpred/traj3492.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/trajpred/traj4014.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/trajpred/traj8507.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/trajpred/traj4574.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Simulation Experiment</h2>
+        
+        <div class="content">
+          <img src="./static/images/sim_scene.png" 
+               alt="Simulation setup overview"
+               style="width: 100%; max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+          <div class="has-text-justified" style="margin-top: 20px;">
+            <p><strong>[Left]</strong> Several objects are placed in a 30 x 30 x 30 cm<sup>3</sup> workspace, with a Franka Panda randomly positioned at the workspace edge. </p>
+            <p><strong>[Right]</strong> Pointclouds and feasible grasp poses are pre-sampled for each scene.</p>
+          </div>
+        </div>
+
+        <div class="columns is-centered">
+          <div class="column is-full">
+            <video controls muted autoplay loop preload="metadata" style="width: 100%; display: block;">
+              <source src="./static/videos/simu/sim_users.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            
+            <p class="has-text-justified" style="margin-top: 20px;">
+              Four different simulated users teleoperate the robot to approach the pregrasps, while assistive algorithms provide assistive control.
+            </p>
+            
+            <div style="margin-top: 20px;">
+              <img src="./static/images/sim_result.png" 
+                   alt="Simulation result"
+                   style="width: 100%; max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Real-world Experiment Setup</h2>
+        <div class="content has-text-centered">
+          <img src="./static/images/setup.png" 
+               alt="Overview of our Real-world experiment setup"
+               style="width: 80%; max-width: 80%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+          <p class="has-text-justified" style="margin-top: 20px;">
+            <strong>Experimental Platform:</strong> The setup utilizes a 7-DoF Franka Research 3 robot and a top-down RGB-D camera to monitor the workspace. Users operate the robot using an <strong>Xbox joystick</strong>: the left joystick and triggers manage translation, while the right joystick and triggers control rotation. RT-V3 assists by fusing these manual inputs with learned behavioral priors via Bayesian posterior estimation to streamline high-DoF grasping tasks.
+          </p>
+        </div>
+
+        <h2 class="title is-3">Real-world Shared Autonomy Tasks</h2>
+        <div class="content has-text-centered">
+          <img src="./static/images/task-scenes.png" 
+               alt="12 tasks in the real-world shared autonomy experiment"
+               style="width: 80%; max-width: 80%; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
+          <p class="has-text-justified" style="margin-top: 20px;">
+            <strong>Diverse Manipulation Scenarios:</strong> We evaluated RT-V3 across <strong>12 distinct tasks</strong> involving various daily objects such as pill bottles, sunscreen, and teapots. These tasks require grasping specific object parts from varied orientations (e.g., "Grasp the ear of the tea pot from the right"). The trials test the framework's ability to resolve <strong>multi-modal intent</strong>, distinguishing between different approach angles based on subtle user command cues.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3 has-text-centered">Robot Trajectron V3 in Real World</h2>
+
+        <div class="content has-text-centered">
+          <p style="margin-bottom: 20px; font-size: 0.9em; color: #666;">
+            RT-V3 demonstrates generalization across grasping different objects from various orientations.
+          </p>
+        </div>
+        <div class="columns is-centered" style="margin-bottom: 10px;">
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene1_3_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene1_4_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene1_2_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene4_1_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+
+        <div class="columns is-centered" style="margin-bottom: 10px;">
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene3_1_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene3_2_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene3_3_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene5_1_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+
+        <div class="columns is-centered" style="margin-bottom: 10px;">
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene2_1_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene2_2_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene2_3_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div class="column is-3">
+            <video controls muted autoplay loop preload="metadata" width="100%">
+              <source src="./static/videos/shared/scene4_2_video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Comparison with Baselines</h2>
+        <div class="columns is-centered">
+        <video controls muted autoplay loop preload="metadata" width="80%">
+          <source src="./static/videos/comparison.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full">
+        <h2 class="title is-3">Failure Cases</h2>
+        <div class="columns is-centered">
+        <video controls muted autoplay loop preload="metadata" width="80%">
+          <source src="./static/videos/failure.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{fu2025tasc,
+      title={Robot Trajectron V3: A Probabilistic Shared Control Framework for SE(3) Manipulation}, 
+      author={Pinhao Song, Zhongxi Li, Ze Fu, Federico Ulloa Rios, Renaud Detry},
+      year={2025},
+      eprint={2509.10416},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2509.10416}, 
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            Page source code was adapted from <a rel="link"
+                                                href="https://github.com/nerfies/nerfies.github.io">here</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
